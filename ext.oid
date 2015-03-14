@@ -1,0 +1,6 @@
+1.3.6.1.5.5.8.2.2   ikeIntermediate     IP Security IKE Intermediate
+2.23.140.1.1        EV                  Extended Validation
+2.23.140.1.2        BR                  Baseline Requirements
+2.23.140.1.2.1      DV                  Domain Validated
+2.23.140.1.2.2      SIV                 Subject Identity Validated
+2.5.29.32.0         anyPolicy           Any Policy

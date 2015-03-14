@@ -1,0 +1,303 @@
+#
+# OpenSSL ca/req 用配置文件
+#
+# 内含所有手册涉及到的配置项
+#
+# Author: Xiami
+# Email: i@f2light.com
+#
+
+[ default ]
+#RANDFILE    =
+oid_file    = ext.oid
+#oid_section =
+
+# ca 配置开始
+
+[ ca ]
+# -name [Mandatory]
+default_ca  = CA_default
+
+[ CA_default ]
+dir = .
+
+# -outdir [Mandatory]
+# 新证书的存放目录
+new_certs_dir   = $dir/certs
+
+# -cert [Mandatory]
+# CA 证书
+certificate = $dir/ca.crt
+
+# -keyfile [Mandatory]
+# CA 私钥
+private_key = $dir/ca.key
+
+# -days
+# 证书有效期（日）
+# 必须设置 default_days 或 default_enddate
+default_days    = 365
+
+# -startdate
+# 证书有效期从（默认当前日期）
+#default_startdate   =
+
+# -enddate
+# 证书有效期到
+# 必须设置 default_days 或 default_enddate
+#default_enddate =
+
+# -crlhours
+# CRL 有效期（小时）
+# 必须设置 default_crl_hours 或 default_crl_days
+#default_crl_hours   =
+
+# -crldays
+# CRL 有效期（日）
+# 必须设置 default_crl_hours 或 default_crl_days
+default_crl_days    = 14
+
+# -md [Mandatory]
+# 消息摘要算法
+default_md  = sha512
+
+# CA 数据库 [Mandatory]
+# 初始值为空的文本文件
+database    = $dir/db/db
+
+# 唯一使用者
+unique_subject  = no
+
+# 下一个证书序列号 [Mandatory]
+# 文本文件，包含一个数字
+serial  = $dir/db/serial
+
+# 下一个 CRL 序列号
+# 文本文件，包含一个数字
+# 仅当此文件存在时生成 CRL 序列号
+crlnumber   = $dir/db/crl_serial
+
+# -extensions
+# V3 证书扩展节
+# 如不指定则生成 V1 证书
+x509_extensions = v3ext
+
+# -crlexts
+# V2 CRL 扩展节
+# 如不指定则生成 V1 CRL
+crl_extensions  = v2crlext
+
+# -preserveDN
+# 保持 DN 顺序（用于老版本 IE 兼容）
+#preserve    = no
+
+# -noemailDN
+# 仅当不想 EMAIL 字段出现在 DN 中时去除下行的注释
+#dmail_in_dn = no
+
+# -msie_hack
+# 兼容老版本 IE
+#msie_hack   = no
+
+# -policy
+# 策略节（控制 DN）
+policy  = match_pol
+
+# 展现格式
+# 参见 x509 手册的 -nameopt, -certopt 参数
+name_opt    = ca_default
+cert_opt    = ca_default
+
+# 从证书请求复制扩展信息
+# 可选值：none(default), copy, copyall(insecure)
+# 谨慎！请阅读 ca 手册 WARNING 部分了解安全隐患！
+copy_extensions = none
+
+# x509v3 扩展节
+# 格式：extension_name = [critical, ]value
+[ v3ext ]
+# 基本约束
+# CA : 该证书是不是 CA 证书。[Mandatory]
+# pathlen : 该证书以下可颁发多少层 CA 证书。
+basicConstraints    = CA:TRUE, pathlen:0
+
+# 密钥用法
+# 支持的值有：digitalSignature, nonRepudiation, keyEncipherment,
+#  dataEncipherment, keyAgreement, keyCertSign, cRLSign,
+#  encipherOnly, decipherOnly
+keyUsage    = digitalSignature
+
+# 增强型密钥用法
+# 支持的值有：serverAuth, clientAuth, codeSigning, emailProtection,
+#  timeStamping, msCodeInd, msCodeCom, msCTLSign, msSGC, msEFS,
+#  nsSGC
+# 允许使用自定义 OID
+extendedKeyUsage    = serverAuth, clientAuth
+
+# 使用者密钥标识符
+subjectKeyIdentifier    = hash
+
+# 授权密钥标识符
+# keyid : 从 CA 证书复制使用者密钥标识符过来。
+#  如设值为 always 则复制失败报错
+# issuer : 复制 CA 证书的颁发者和序列号过来。[?]
+#  仅当 keyid 复制失败或未包括时生成此字段
+#  如设值为 always 则无论如何都生成此字段
+authorityKeyIdentifier  = keyid, issuer:always
+
+# 使用者可选名称
+# 以下任意搭配（可重复）
+# email : 特殊值 copy 意味着和 DN 中的 EMAIL 一致
+# URI : 统一资源标识
+# DNS : DNS 域名
+# RID : 注册 ID (OID)
+# IP : IP 地址
+# dirName : 一个 DN 信息节
+# otherName : 自定义值。格式 OID;ASN1_CONTENT
+subjectAltName  = email:copy, email:i@example.com
+#subjectAltName  = URI:http://www.example.com
+#subjectAltName  = DNS:www.example.com
+#subjectAltName  = IP:192.168.1.1
+#subjectAltName  = RID:1.2.3.4
+#subjectAltName  = otherName:1.2.3.4;UTF8:string
+#subjectAltName  = dirName:dir_sect
+#[ dir_sect ]
+#C=CN
+#O=Xiami Inc.
+#OU=Xiami Unit
+#CN=Xiami
+
+# 颁发者可选名称
+# 可选值同使用者可选名称
+#  除了 email:copy 不能用
+# issuer:copy : 复制颁发者的使用者可选名称过来
+issuerAltName   = issuer:copy
+
+# 授权信息访问
+# 格式：OID;Location
+authorityInfoAccess = OCSP;URI:http://ocsp.example.com
+#authorityInfoAccess = caIssuers;URI:http://www.example.com/a.crt
+
+# CRL 分发点
+# 这里给出的是 Simple 格式，完整格式参见 x509v3_config 手册
+#crlDistributionPoints  = URI:http://www.example.com/test.crl
+
+# 证书策略
+#  可以是单一 OID ，如果要包含 CPS 等额外信息需要额外建节。
+certificatePolicies = anyPolicy
+#certificatePolicies = @crtpol
+#[ crtpol ]
+#policyIdentifier    = EV
+#CPS.1   = URI:http://www.example.com
+#CPS.2   = URI:http://mirror.example.com
+#userNotice.1    = @notice
+#[ notice ]
+#explicitText    = "Explicit Text Here"
+# organization 和 noticeNumbers 必须同时存在
+#organization    = "Org"
+#noticeNumbers   = 1,2,3,4
+
+# 未详细了解扩展项
+#policyConstraints   = requireExplicitPolicy:3
+#inhibitAnyPolicy    = 2
+#nameConstraints = permitted;email:.example.com
+# OCSP No Check
+#noCheck     = ignored
+
+# 自定义扩展
+#1.2.3.4 = critical, ASN1:UTF8String:Some random data
+#1.2.3.4 = critical, DER:01:02:03:04
+#1.2.3.4 = ASN1:SEQUENCE:seq_sect
+#[ seq_sect ]
+#field1  = UTF8:field1
+#field2  = UTF8:field2
+
+[ v2crlext ]
+authorityKeyIdentifier  = keyid:always
+authorityInfoAccess = caIssuers;URI:http://www.example.com/ca.crt
+# 颁发者分发点(仅用于 CRL)
+#  暂时未用到，参见 x509v3_config 手册。
+#issuingDistributionPoint   = critical, @idp_section
+
+[ match_pol ]
+# 格式：DN 字段 = match/supplied/optional
+#  match: 必须和 CA 证书里的相应字段相同
+#  supplied: 必须出现
+#  optional: 可有可无
+# 没有出现的 DN 字段会被自动删除除非设置了 -preserveDN
+#domainComponent         = optional
+countryName             = supplied
+stateOrProvinceName     = optional
+localityName            = optional
+organizationName        = supplied
+organizationUnitName    = optional
+commonName              = supplied
+emailAddress            = optional
+
+# ca 配置结束
+# req 配置开始
+
+[ req ]
+# -passin -passout
+# 输入私玥的保护密码与输出私玥的保护密码
+#input_password  =
+#output_password =
+
+# -new -newkey*
+# 新私钥长度(bits, 默认 512)
+#default_bits    = 512
+
+# -keyout
+# 默认的新私钥输出文件
+#default_keyfile =
+
+# -nodes
+# 不加密新私钥
+#encrypt_key = no
+
+# -[digest]
+# 摘要算法
+default_md  = sha512
+
+# 字符串编码限制
+# 值：default/pkix/utf8only/nombstr
+#  utf8only 是 2003 年后 PKIX 推荐值 [RFC2459]
+string_mask = utf8only
+
+# -reqexts
+# 证书请求扩展
+req_extensions  = v3ext
+
+# -x509 -extensions
+# 仅当使用了 -x509 参数时有效
+# 生成的新证书的扩展
+x509_extensions = v3ext
+
+# 直接使用配置文件不向用户询问一些字段
+#prompt  = no
+
+# 字段值得编码是 UTF8
+#  注释掉此行则编码为 ASCII
+utf8    = yes
+
+# 请求属性 格式同 distinguished_name
+#  OpenSSL ca 不处理此值
+#attributes  =
+
+# DN
+# 指向一个节，限制 DN 值
+distinguished_name  = req_dn
+
+[ req_dn ]
+countryName             = Country Name (2 letter code)
+countryName_default     = CN
+countryName_min         = 2
+countryName_max         = 2
+stateOrProvinceName     = State or Province Name
+localityName            = Locality Name (eg, city)
+organizationName        = Organization Name
+organizationUnitName    = Organization Unit Name
+commonName              = Common Name
+emailAddress            = Email Address
+
+# req 结束
