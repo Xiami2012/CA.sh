@@ -5,8 +5,8 @@ url_cacert  = $url_base/ca.crt
 url_crl     = $url_base/ca.crl
 
 [ v3ext ]
-basicConstraints    = CA:TRUE, pathlen:0
-keyUsage            = digitalSignature
+basicConstraints    = critical, CA:TRUE, pathlen:0
+keyUsage            = critical, digitalSignature
 extendedKeyUsage    = serverAuth, clientAuth
 subjectKeyIdentifier    = hash
 authorityKeyIdentifier  = keyid, issuer:always
@@ -26,7 +26,7 @@ subjectAltName  = email:copy, email:i@example.com
 
 issuerAltName       = issuer:copy
 authorityInfoAccess = OCSP;URI:$url_ocsp, caIssuers;URI:$url_cacert
-crlDistributionPoints  = URI:$url_crl
+crlDistributionPoints   = URI:$url_crl
 
 certificatePolicies = anyPolicy
 #certificatePolicies = @crtpol
@@ -41,7 +41,7 @@ certificatePolicies = anyPolicy
 #noticeNumbers   = 1,2,3,4
 
 #policyConstraints   = requireExplicitPolicy:3
-#inhibitAnyPolicy    = 2
+#inhibitAnyPolicy    = critical, 2
 #nameConstraints = permitted;email:.example.com
 #noCheck     = ignored
 

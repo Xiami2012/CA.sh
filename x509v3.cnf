@@ -7,16 +7,16 @@ url_crl     = $url_base/ca.crl
 # x509v3 扩展节
 # 格式：extension_name = [critical, ]value
 [ v3ext ]
-# 基本约束
+# 基本约束(CA 证书 MUST critical)
 # CA : 该证书是不是 CA 证书。[Mandatory]
 # pathlen : 该证书以下可颁发多少层 CA 证书。
-basicConstraints    = CA:TRUE, pathlen:0
+basicConstraints    = critical, CA:TRUE, pathlen:0
 
-# 密钥用法
+# 密钥用法(SHOULD critical)
 # 支持的值有：digitalSignature, nonRepudiation, keyEncipherment,
 #  dataEncipherment, keyAgreement, keyCertSign, cRLSign,
 #  encipherOnly, decipherOnly
-keyUsage    = digitalSignature
+keyUsage    = critical, digitalSignature
 
 # 增强型密钥用法
 # 支持的值有：serverAuth, clientAuth, codeSigning, emailProtection,
@@ -25,10 +25,10 @@ keyUsage    = digitalSignature
 # 允许使用自定义 OID
 extendedKeyUsage    = serverAuth, clientAuth
 
-# 使用者密钥标识符
+# 使用者密钥标识符(MUST non-critical)
 subjectKeyIdentifier    = hash
 
-# 授权密钥标识符
+# 授权密钥标识符(MUST non-critical)
 # keyid : 从 CA 证书复制使用者密钥标识符过来。
 #  如设值为 always 则复制失败报错
 # issuer : 复制 CA 证书的颁发者和序列号过来。[?]
@@ -37,6 +37,7 @@ subjectKeyIdentifier    = hash
 authorityKeyIdentifier  = keyid, issuer:always
 
 # 使用者可选名称
+#  (如果 DN 为空，MUST critical；否则 SHOULD non-critical)
 # 以下任意搭配（可重复）
 # email : 特殊值 copy 意味着和 DN 中的 EMAIL 一致
 # URI : 统一资源标识
@@ -58,17 +59,17 @@ subjectAltName  = email:copy, email:i@example.com
 #OU=Xiami Unit
 #CN=Xiami
 
-# 颁发者可选名称
+# 颁发者可选名称(SHOULD non-critical)
 # 可选值同使用者可选名称
 #  除了 email:copy 不能用
 # issuer:copy : 复制颁发者的使用者可选名称过来
 issuerAltName   = issuer:copy
 
-# 授权信息访问
+# 授权信息访问(MUST non-critical)
 # 格式：OID;Location
 authorityInfoAccess = OCSP;URI:$url_ocsp, caIssuers;URI:$url_cacert
 
-# CRL 分发点
+# CRL 分发点(SHOULD non-critical)
 # 这里给出的是 Simple 格式，完整格式参见 x509v3_config 手册
 crlDistributionPoints   = URI:$url_crl
 
@@ -89,7 +90,8 @@ certificatePolicies = anyPolicy
 
 # 未详细了解扩展项
 #policyConstraints   = requireExplicitPolicy:3
-#inhibitAnyPolicy    = 2
+#  inhibitAnyPolicy MUST critical
+#inhibitAnyPolicy    = critical, 2
 #nameConstraints = permitted;email:.example.com
 # OCSP No Check
 #noCheck     = ignored
