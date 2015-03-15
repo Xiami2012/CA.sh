@@ -1,0 +1,35 @@
+# 创建密钥
+#  DSA (1024 为 PARAMETER 位长)
+openssl dsaparam -genkey -noout 1024
+openssl genpkey -algorithm dsa -pkeyopt dsa_paramgen_bits:1024
+#  RSA (2048 为 KEY 位长)
+openssl genrsa 2048
+openssl genpkey -algorithm rsa -pkeyopt rsa_keygen_bits:2048
+#  EC (secp521r1 为指定曲线)
+openssl ecparam -name secp521r1 -genkey -noout
+
+# 密钥保护(使用 aes256 保护)
+# 不论输入是否加密过的密钥，是何种算法加密
+#  想要输出的密钥是加密的就加上 -aes256 参数
+#  想要输出的密钥是未加密的就去掉 -aes256 参数
+openssl [rsa/dsa/ec] -aes256 -in key -out key.new
+
+# 创建证书请求
+openssl req -new -key key -config req.cnf -reqexts ext_req
+
+# CA 签署
+# 自签加上 -selfsign 参数
+openssl ca -config ca.cnf -name CA_default -extensions ext -extfile v3ext.cnf
+
+# 生成包含证书链的 PEM
+#  1) cert = 想导出的子证书
+#  2) cp $cert cert_chain
+#  3) cert = $cert 的颁发者证书
+#  4) cat $cert >> cert_chain
+#  5) 如果 $cert 是根证书，结束；否则跳到步骤 3
+
+# 吊销证书
+
+# 生成 CRL
+
+# 生成 PKCS#12 个人证书
