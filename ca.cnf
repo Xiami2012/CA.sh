@@ -12,6 +12,8 @@
 oid_file    = ext.oid
 #oid_section =
 
+url_cacert  = http://www.example.com/ca.crt
+
 [ ca ]
 # -name [Mandatory]
 default_ca  = CA_default
@@ -113,7 +115,7 @@ copy_extensions = copy
 
 [ v2crlext ]
 authorityKeyIdentifier  = keyid:always
-authorityInfoAccess = caIssuers;URI:http://www.example.com/ca.crt
+authorityInfoAccess = caIssuers;URI:$url_cacert
 # 颁发者分发点(仅用于 CRL)
 #  暂时未用到，参见 x509v3_config 手册。
 #issuingDistributionPoint   = critical, @idp_section

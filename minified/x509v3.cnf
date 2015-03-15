@@ -1,3 +1,9 @@
+[ default ]
+url_base    = http://www.example.com
+url_ocsp    = $url_base/ocsp
+url_cacert  = $url_base/ca.crt
+url_crl     = $url_base/ca.crl
+
 [ v3ext ]
 basicConstraints    = CA:TRUE, pathlen:0
 keyUsage            = digitalSignature
@@ -19,9 +25,8 @@ subjectAltName  = email:copy, email:i@example.com
 #CN=Xiami
 
 issuerAltName       = issuer:copy
-authorityInfoAccess = OCSP;URI:http://ocsp.example.com
-#authorityInfoAccess = caIssuers;URI:http://www.example.com/a.crt
-#crlDistributionPoints  = URI:http://www.example.com/test.crl
+authorityInfoAccess = OCSP;URI:$url_ocsp, caIssuers;URI:$url_cacert
+crlDistributionPoints  = URI:$url_crl
 
 certificatePolicies = anyPolicy
 #certificatePolicies = @crtpol
@@ -34,10 +39,12 @@ certificatePolicies = anyPolicy
 #explicitText    = "Explicit Text Here"
 #organization    = "Org"
 #noticeNumbers   = 1,2,3,4
+
 #policyConstraints   = requireExplicitPolicy:3
 #inhibitAnyPolicy    = 2
 #nameConstraints = permitted;email:.example.com
 #noCheck     = ignored
+
 #1.2.3.4 = critical, ASN1:UTF8String:Some random data
 #1.2.3.4 = critical, DER:01:02:03:04
 #1.2.3.4 = ASN1:SEQUENCE:seq_sect

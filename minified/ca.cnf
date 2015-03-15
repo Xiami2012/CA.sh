@@ -3,6 +3,8 @@
 oid_file    = ext.oid
 #oid_section =
 
+url_cacert  = http://www.example.com/ca.crt
+
 [ ca ]
 default_ca  = CA_default
 
@@ -33,7 +35,7 @@ copy_extensions     = copy
 
 [ v2crlext ]
 authorityKeyIdentifier  = keyid:always
-authorityInfoAccess     = caIssuers;URI:http://www.example.com/ca.crt
+authorityInfoAccess     = caIssuers;URI:$url_cacert
 #issuingDistributionPoint   = critical, @idp_section
 
 [ match_pol ]

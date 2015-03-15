@@ -1,3 +1,9 @@
+[ default ]
+url_base    = http://www.example.com
+url_ocsp    = $url_base/ocsp
+url_cacert  = $url_base/ca.crt
+url_crl     = $url_base/ca.crl
+
 # x509v3 扩展节
 # 格式：extension_name = [critical, ]value
 [ v3ext ]
@@ -60,12 +66,11 @@ issuerAltName   = issuer:copy
 
 # 授权信息访问
 # 格式：OID;Location
-authorityInfoAccess = OCSP;URI:http://ocsp.example.com
-#authorityInfoAccess = caIssuers;URI:http://www.example.com/a.crt
+authorityInfoAccess = OCSP;URI:$url_ocsp, caIssuers;URI:$url_cacert
 
 # CRL 分发点
 # 这里给出的是 Simple 格式，完整格式参见 x509v3_config 手册
-#crlDistributionPoints  = URI:http://www.example.com/test.crl
+crlDistributionPoints   = URI:$url_crl
 
 # 证书策略
 #  可以是单一 OID ，如果要包含 CPS 等额外信息需要额外建节。
