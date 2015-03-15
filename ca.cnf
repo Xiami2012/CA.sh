@@ -21,20 +21,20 @@ dir = .
 
 # -outdir [Mandatory]
 # 新证书的存放目录
-new_certs_dir   = $dir/certs
+new_certs_dir   = $dir/cert
 
 # -cert [Mandatory]
 # CA 证书
-certificate = $dir/ca.crt
+certificate = ${new_certs_dir}/01.pem
 
 # -keyfile [Mandatory]
 # CA 私钥
-private_key = $dir/ca.key
+private_key = $dir/privkey/01.key
 
 # -days
 # 证书有效期（日）
 # 必须设置 default_days 或 default_enddate
-default_days    = 365
+#default_days    = 365
 
 # -startdate
 # 证书有效期从（默认当前日期）
@@ -53,7 +53,7 @@ default_days    = 365
 # -crldays
 # CRL 有效期（日）
 # 必须设置 default_crl_hours 或 default_crl_days
-default_crl_days    = 14
+default_crl_days    = 7
 
 # -md [Mandatory]
 # 消息摘要算法
@@ -61,7 +61,7 @@ default_md  = sha512
 
 # CA 数据库 [Mandatory]
 # 初始值为空的文本文件
-database    = $dir/db/db
+database    = $dir/db/index.txt
 
 # 唯一使用者
 unique_subject  = no
@@ -73,7 +73,7 @@ serial  = $dir/db/serial
 # 下一个 CRL 序列号
 # 文本文件，包含一个数字
 # 仅当此文件存在时生成 CRL 序列号
-crlnumber   = $dir/db/crl_serial
+crlnumber   = $dir/db/crlnumber
 
 # -extensions
 # V3 证书扩展节
@@ -109,7 +109,7 @@ cert_opt    = ca_default
 # 从证书请求复制扩展信息
 # 可选值：none(default), copy, copyall(insecure)
 # 谨慎！请阅读 ca 手册 WARNING 部分了解安全隐患！
-copy_extensions = none
+copy_extensions = copy
 
 [ v2crlext ]
 authorityKeyIdentifier  = keyid:always
@@ -129,6 +129,6 @@ countryName             = supplied
 stateOrProvinceName     = optional
 localityName            = optional
 organizationName        = supplied
-organizationUnitName    = optional
+organizationalUnitName  = optional
 commonName              = supplied
 emailAddress            = optional

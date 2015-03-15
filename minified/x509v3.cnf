@@ -1,0 +1,46 @@
+[ v3ext ]
+basicConstraints    = CA:TRUE, pathlen:0
+keyUsage            = digitalSignature
+extendedKeyUsage    = serverAuth, clientAuth
+subjectKeyIdentifier    = hash
+authorityKeyIdentifier  = keyid, issuer:always
+
+subjectAltName  = email:copy, email:i@example.com
+#subjectAltName  = URI:http://www.example.com
+#subjectAltName  = DNS:www.example.com
+#subjectAltName  = IP:192.168.1.1
+#subjectAltName  = RID:1.2.3.4
+#subjectAltName  = otherName:1.2.3.4;UTF8:string
+#subjectAltName  = dirName:dir_sect
+#[ dir_sect ]
+#C=CN
+#O=Xiami Inc.
+#OU=Xiami Unit
+#CN=Xiami
+
+issuerAltName       = issuer:copy
+authorityInfoAccess = OCSP;URI:http://ocsp.example.com
+#authorityInfoAccess = caIssuers;URI:http://www.example.com/a.crt
+#crlDistributionPoints  = URI:http://www.example.com/test.crl
+
+certificatePolicies = anyPolicy
+#certificatePolicies = @crtpol
+#[ crtpol ]
+#policyIdentifier    = EV
+#CPS.1   = URI:http://www.example.com
+#CPS.2   = URI:http://mirror.example.com
+#userNotice.1    = @notice
+#[ notice ]
+#explicitText    = "Explicit Text Here"
+#organization    = "Org"
+#noticeNumbers   = 1,2,3,4
+#policyConstraints   = requireExplicitPolicy:3
+#inhibitAnyPolicy    = 2
+#nameConstraints = permitted;email:.example.com
+#noCheck     = ignored
+#1.2.3.4 = critical, ASN1:UTF8String:Some random data
+#1.2.3.4 = critical, DER:01:02:03:04
+#1.2.3.4 = ASN1:SEQUENCE:seq_sect
+#[ seq_sect ]
+#field1  = UTF8:field1
+#field2  = UTF8:field2
