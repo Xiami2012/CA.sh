@@ -29,7 +29,7 @@ authorityInfoAccess = OCSP;URI:$url_ocsp, caIssuers;URI:$url_cacert
 crlDistributionPoints   = URI:$url_crl
 
 certificatePolicies = anyPolicy
-#certificatePolicies = @crtpol
+#certificatePolicies = ia5org, @crtpol
 #[ crtpol ]
 #policyIdentifier    = EV
 #CPS.1   = URI:http://www.example.com

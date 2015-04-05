@@ -75,8 +75,9 @@ crlDistributionPoints   = URI:$url_crl
 
 # 证书策略
 #  可以是单一 OID ，如果要包含 CPS 等额外信息需要额外建节。
+#  如果要包含 userNotice 需要加上 ia5org 使 Windows 证书管理器识别。
 certificatePolicies = anyPolicy
-#certificatePolicies = @crtpol
+#certificatePolicies = ia5org, @crtpol
 #[ crtpol ]
 #policyIdentifier    = EV
 #CPS.1   = URI:http://www.example.com
