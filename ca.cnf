@@ -8,15 +8,26 @@
 #
 
 [ default ]
-#RANDFILE	=
+url_cacert	= http://www.example.com/ca.crt
+
+# 全局配置
 oid_file	= ext.oid
 #oid_section	=
 
-url_cacert	= http://www.example.com/ca.crt
-
 [ ca ]
 # -name [Mandatory]
+# 选择使用的 ca 配置节
 default_ca	= CA_default
+
+# 以下参数只能直接从 ca 节读取
+
+# 读写随机数种子的文件，也可以是 EGD 套接字
+#RANDFILE	=
+
+# -msie_hack
+# 必须位于 ca 节才能被正确读取(文档说可能是 bug)
+# 兼容老版本 IE ，有若干安全问题，不建议使用
+#msie_hack	= no
 
 [ CA_default ]
 dir				= .
@@ -34,12 +45,13 @@ certificate		= ${new_certs_dir}/01.pem
 private_key		= $dir/privkey/01.key
 
 # -days
-# 证书有效期（日）
+# 证书有效期(日)
 # 必须设置 default_days 或 default_enddate
 #default_days	= 365
 
 # -startdate
-# 证书有效期从（默认当前日期）
+# 证书有效期从(默认当前日期)
+# 格式：YYMMDDHHMMSSZ (default_enddate 同)
 #default_startdate	=
 
 # -enddate
@@ -48,17 +60,19 @@ private_key		= $dir/privkey/01.key
 #default_enddate		=
 
 # -crlhours
-# CRL 有效期（小时）
+# CRL 有效期(小时)
 # 必须设置 default_crl_hours 或 default_crl_days
 #default_crl_hours	=
 
 # -crldays
-# CRL 有效期（日）
+# CRL 有效期(日)
 # 必须设置 default_crl_hours 或 default_crl_days
 default_crl_days	= 7
 
 # -md [Mandatory]
-# 消息摘要算法
+# 消息摘要算法(值参见 dgst(1))
+# 可设置为 default 以获取证书公钥算法的默认签名哈希算法
+#  参见 EVP_PKEY_get_default_digest_nid(3) (当前是无脑 SHA1)
 default_md		= sha512
 
 # CA 数据库 [Mandatory]
@@ -66,14 +80,15 @@ default_md		= sha512
 database		= $dir/db/index.txt
 
 # 唯一使用者
+# 默认值 yes (用于兼容 0.9.8 前的 OpenSSL)
 unique_subject	= no
 
 # 下一个证书序列号 [Mandatory]
-# 文本文件，包含一个数字
+# 文本文件，包含一个数字(十六进制)
 serial			= $dir/db/serial
 
 # 下一个 CRL 序列号
-# 文本文件，包含一个数字
+# 文本文件，包含一个数字(十六进制)
 # 仅当此文件存在时生成 CRL 序列号
 crlnumber		= $dir/db/crlnumber
 
@@ -88,19 +103,16 @@ crlnumber		= $dir/db/crlnumber
 crl_extensions	= v2crlext
 
 # -preserveDN
-# 保持 DN 顺序（用于老版本 IE 兼容）
+# 保持 DN 顺序(用于老版本 IE 兼容)
 #preserve		= no
 
 # -noemailDN
-# 仅当不想 EMAIL 字段出现在 DN 中时去除下行的注释
-#dmail_in_dn		= no
+# 当不希望 EMAIL 字段出现在 DN 中时设置为 no
+# 默认 yes
+#email_in_dn		= no
 
-# -msie_hack
-# 兼容老版本 IE
-#msie_hack		= no
-
-# -policy
-# 策略节（控制 DN）
+# -policy [Mandatory]
+# 策略节(控制 DN 中哪些字段为必须)
 policy			= match_pol
 
 # 展现格式
@@ -114,11 +126,16 @@ cert_opt		= ca_default
 copy_extensions	= copy
 
 [ v2crlext ]
-authorityKeyIdentifier	= keyid:always
-authorityInfoAccess		= caIssuers;URI:$url_cacert
+# All 7 fields from RFC 5280
+authorityKeyIdentifier	= keyid, issuer
+issuerAltName			= issuer:copy
+# cRLNumber 由 ca 的 crlnumber 项控制
+# TODO: Delta CRL Indicator not directly supported
 # 颁发者分发点(仅用于 CRL)
 #  暂时未用到，参见 x509v3_config 手册。
 #issuingDistributionPoint	= critical, @idp_section
+# TODO: Freshest CRL not directly supported
+authorityInfoAccess		= caIssuers;URI:$url_cacert
 
 [ match_pol ]
 # 格式：DN 字段 = match/supplied/optional
