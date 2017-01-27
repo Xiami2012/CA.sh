@@ -16,7 +16,8 @@ oid_file    = ext.oid
 #input_password  =
 #output_password =
 
-# -new -newkey*
+# -newkey
+# 在有 -new 时生效
 # 新私钥长度(bits, 默认 512)
 #default_bits    = 512
 

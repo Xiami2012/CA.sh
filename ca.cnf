@@ -130,11 +130,13 @@ copy_extensions	= copy
 authorityKeyIdentifier	= keyid, issuer
 issuerAltName			= issuer:copy
 # cRLNumber 由 ca 的 crlnumber 项控制
-# TODO: Delta CRL Indicator not directly supported
+# TODO: Delta CRL Indicator
+#deltaCRL =
 # 颁发者分发点(仅用于 CRL)
 #  暂时未用到，参见 x509v3_config 手册。
 #issuingDistributionPoint	= critical, @idp_section
-# TODO: Freshest CRL not directly supported
+# TODO: Freshest CRL
+#freshestCRL =
 authorityInfoAccess		= caIssuers;URI:$url_cacert
 
 [ match_pol ]

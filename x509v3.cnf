@@ -7,25 +7,44 @@ url_crl     = $url_base/ca.crl
 # x509v3 扩展节
 # 格式：extension_name = [critical, ]value
 [ v3ext ]
-# 基本约束(CA 证书 MUST critical)
+# 基本约束(CA MUST critical)
 # CA : 该证书是不是 CA 证书。[Mandatory]
 # pathlen : 该证书以下可颁发多少层 CA 证书。
 basicConstraints    = critical, CA:TRUE, pathlen:0
+#basicConstraints    = CA:FALSE
 
-# 密钥用法(SHOULD critical)
-# 支持的值有：digitalSignature, nonRepudiation, keyEncipherment,
-#  dataEncipherment, keyAgreement, keyCertSign, cRLSign,
-#  encipherOnly, decipherOnly
-keyUsage    = critical, digitalSignature
+# 密钥用法(CA MUST critical)
+# 支持的值有：
+#  digitalSignature: 验证非证书与 CRL 数字签名。用于身份认证、数据源认证或完整性验证等
+#  nonRepudiation: 验证非证书与 CRL 数字签名。用于提供不可否认服务
+#  keyEncipherment: 用于加密私钥或密钥
+#  dataEncipherment: 用于直接加密原始用户数据
+#  keyAgreement: 用于密钥协商
+#  keyCertSign: 验证证书的数字签名。基本约束必须设置 CA:TRUE
+#  cRLSign: 验证 CRL 数字签名
+#  以下两个值必须同 keyAgreement 一同设定，否则行为未定义。
+#  encipherOnly: 密钥协商时仅用于加密数据
+#  decipherOnly: 密钥协商时仅用于解密数据
+keyUsage    = critical, keyCertSign, cRLSign
+#keyUsage    = digitalSignature, keyEncipherment
 
 # 增强型密钥用法
-# 支持的值有：serverAuth, clientAuth, codeSigning, emailProtection,
-#  timeStamping, msCodeInd, msCodeCom, msCTLSign, msSGC, msEFS,
-#  nsSGC
+# 与密钥用法独立，若均出现，两者均需通过检查
+# 通常不出现在 CA 证书中，若出现可使用 anyExtendedKeyUsage ，若使用则 SHOULD non-critical
+# 支持的值有：(冒号后为可能的相应密钥用法)
+#  serverAuth(TLS 服务端认证): digitalSignature, keyEncipherment or keyAgreement
+#  clientAuth(TLS 客户端认证): digitalSignature and/or keyAgreement
+#  codeSigning: digitalSignature
+#  emailProtection: digitalSignature, nonRepudiation, and/or (keyEncipherment or keyAgreement)
+#  timeStamping: digitalSignature and/or nonRepudiation
+#  OCSPSigning: digitalSignature and/or nonRepudiation
+#  msCodeInd, msCodeCom, msCTLSign, msSGC, msEFS, nsSGC
 # 允许使用自定义 OID
-extendedKeyUsage    = serverAuth, clientAuth
+extendedKeyUsage    = anyExtendedKeyUsage
+#extendedKeyUsage    = serverAuth, clientAuth
 
-# 使用者密钥标识符(MUST non-critical)
+# 使用者密钥标识符(CA MUST non-critical)
+# RFC3280
 subjectKeyIdentifier    = hash
 
 # 授权密钥标识符(MUST non-critical)
@@ -70,12 +89,23 @@ issuerAltName   = issuer:copy
 authorityInfoAccess = OCSP;URI:$url_ocsp, caIssuers;URI:$url_cacert
 
 # CRL 分发点(SHOULD non-critical)
-# 这里给出的是 Simple 格式，完整格式参见 x509v3_config 手册
 crlDistributionPoints   = URI:$url_crl
+#crlDistributionPoints   = crldp1_section
+#[crldp1_section]
+#fullname = URI:$url_crl
+# CRLIssuer 用于 indirect CRLs
+#CRLIssuer = dirName:crlissuer_sect
+#reasons = keyCompromise, CACompromise
+#[crlissuer_sect]
+#C=UK
+#O=Organisation
+#CN=Some Name
+
+# Issuing Distribution Point 仅出现于 CRL 中，于 ca.cnf 中定义。
 
 # 证书策略
 #  可以是单一 OID ，如果要包含 CPS 等额外信息需要额外建节。
-#  如果要包含 userNotice 需要加上 ia5org 使 Windows 证书管理器识别。
+#  如果要包含 userNotice 需要加上 ia5org 以兼容 IE5 编码。
 certificatePolicies = anyPolicy
 #certificatePolicies = ia5org, @crtpol
 #[ crtpol ]
@@ -96,6 +126,11 @@ certificatePolicies = anyPolicy
 #nameConstraints = permitted;email:.example.com
 # OCSP No Check
 #noCheck     = ignored
+# The following is which in RFC5280 but not in openssl doc
+#policyMappings =
+#subjectDirectoryAttributes =
+#freshestCRL =
+#subjectInfoAccess =
 
 # 自定义扩展
 #1.2.3.4 = critical, ASN1:UTF8String:Some random data
