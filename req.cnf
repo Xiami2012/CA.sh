@@ -6,70 +6,72 @@
 #
 
 [ default ]
-#RANDFILE    =
-oid_file    = ext.oid
-#oid_section =
+#RANDFILE	=
+oid_file	= ext.oid
+#oid_section	=
 
 [ req ]
 # -passin -passout
 # 输入私玥的保护密码与输出私玥的保护密码
-#input_password  =
-#output_password =
+#input_password		=
+#output_password		=
 
 # -newkey
 # 在有 -new 时生效
 # 新私钥长度(bits, 默认 512)
-#default_bits    = 512
+#default_bits		= 512
 
 # -keyout
 # 默认的新私钥输出文件
-#default_keyfile =
+#default_keyfile		=
 
 # -nodes
 # 不加密新私钥
-#encrypt_key = no
+#encrypt_key			= no
 
 # -[digest]
 # 摘要算法
-default_md  = sha512
+default_md			= sha512
 
 # 字符串编码限制
 # 值：default/pkix/utf8only/nombstr
 #  utf8only 是 2003 年后 PKIX 推荐值 [RFC2459]
-string_mask = utf8only
+string_mask			= utf8only
 
 # -reqexts
 # 证书请求扩展
-#req_extensions  = v3ext
+#req_extensions		= v3ext
 
 # -x509 -extensions
 # 仅当使用了 -x509 参数时有效
 # 生成的新证书的扩展
-#x509_extensions = v3ext
+#x509_extensions		= v3ext
 
 # 直接使用配置文件不向用户询问一些字段
-#prompt  = no
+#prompt				= no
 
 # 字段值得编码是 UTF8
 #  注释掉此行则编码为 ASCII
-utf8    = yes
+utf8				= yes
 
 # 请求属性 格式同 distinguished_name
 #  OpenSSL ca 不处理此值
-#attributes  =
+#attributes			=
 
 # DN
 # 指向一个节，限制 DN 值
-distinguished_name  = req_dn
+distinguished_name	= req_dn
 
 [ req_dn ]
-countryName             = Country Name (2 letter code)
-countryName_default     = CN
-countryName_min         = 2
-countryName_max         = 2
-stateOrProvinceName     = State or Province Name
-localityName            = Locality Name (eg, city)
-organizationName        = Organization Name
-organizationUnitName    = Organization Unit Name
-commonName              = Common Name
-emailAddress            = Email Address
+countryName				= Country Name (2 letter code)
+countryName_default		= CN
+countryName_min			= 2
+countryName_max			= 2
+stateOrProvinceName		= State or Province Name
+localityName			= Locality Name (eg, city)
+organizationName		= Organization Name
+organizationUnitName	= Organization Unit Name
+commonName				= Common Name
+emailAddress			= Email Address
+
+# vim: set ts=4:

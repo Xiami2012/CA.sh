@@ -1,8 +1,8 @@
 [ default ]
-url_base    = http://www.example.com
-url_ocsp    = $url_base/ocsp
-url_cacert  = $url_base/ca.crt
-url_crl     = $url_base/ca.crl
+url_base	= http://www.example.com
+url_ocsp	= $url_base/ocsp
+url_cacert	= $url_base/ca.crt
+url_crl		= $url_base/ca.crl
 
 # x509v3 扩展节
 # 格式：extension_name = [critical, ]value
@@ -10,8 +10,8 @@ url_crl     = $url_base/ca.crl
 # 基本约束(CA MUST critical)
 # CA : 该证书是不是 CA 证书。[Mandatory]
 # pathlen : 该证书以下可颁发多少层 CA 证书。
-basicConstraints    = critical, CA:TRUE, pathlen:0
-#basicConstraints    = CA:FALSE
+basicConstraints	= critical, CA:TRUE, pathlen:0
+#basicConstraints	= CA:FALSE
 
 # 密钥用法(CA MUST critical)
 # 支持的值有：
@@ -25,8 +25,8 @@ basicConstraints    = critical, CA:TRUE, pathlen:0
 #  以下两个值必须同 keyAgreement 一同设定，否则行为未定义。
 #  encipherOnly: 密钥协商时仅用于加密数据
 #  decipherOnly: 密钥协商时仅用于解密数据
-keyUsage    = critical, keyCertSign, cRLSign
-#keyUsage    = digitalSignature, keyEncipherment
+keyUsage			= critical, keyCertSign, cRLSign
+#keyUsage			= digitalSignature, keyEncipherment
 
 # 增强型密钥用法
 # 与密钥用法独立，若均出现，两者均需通过检查
@@ -40,12 +40,12 @@ keyUsage    = critical, keyCertSign, cRLSign
 #  OCSPSigning: digitalSignature and/or nonRepudiation
 #  msCodeInd, msCodeCom, msCTLSign, msSGC, msEFS, nsSGC
 # 允许使用自定义 OID
-extendedKeyUsage    = anyExtendedKeyUsage
-#extendedKeyUsage    = serverAuth, clientAuth
+extendedKeyUsage	= anyExtendedKeyUsage
+#extendedKeyUsage	= serverAuth, clientAuth
 
 # 使用者密钥标识符(CA MUST non-critical)
 # RFC3280
-subjectKeyIdentifier    = hash
+subjectKeyIdentifier	= hash
 
 # 授权密钥标识符(MUST non-critical)
 # keyid : 从 CA 证书复制使用者密钥标识符过来。
@@ -53,7 +53,7 @@ subjectKeyIdentifier    = hash
 # issuer : 复制 CA 证书的颁发者和序列号过来。[?]
 #  仅当 keyid 复制失败或未包括时生成此字段
 #  如设值为 always 则无论如何都生成此字段
-authorityKeyIdentifier  = keyid, issuer:always
+authorityKeyIdentifier	= keyid, issuer:always
 
 # 使用者可选名称
 #  (如果 DN 为空，MUST critical；否则 SHOULD non-critical)
@@ -65,13 +65,13 @@ authorityKeyIdentifier  = keyid, issuer:always
 # IP : IP 地址
 # dirName : 一个 DN 信息节
 # otherName : 自定义值。格式 OID;ASN1_CONTENT
-subjectAltName  = email:copy, email:i@example.com
-#subjectAltName  = URI:http://www.example.com
-#subjectAltName  = DNS:www.example.com
-#subjectAltName  = IP:192.168.1.1
-#subjectAltName  = RID:1.2.3.4
-#subjectAltName  = otherName:1.2.3.4;UTF8:string
-#subjectAltName  = dirName:dir_sect
+subjectAltName		= email:copy, email:i@example.com
+#subjectAltName		= URI:http://www.example.com
+#subjectAltName		= DNS:www.example.com
+#subjectAltName		= IP:192.168.1.1
+#subjectAltName		= RID:1.2.3.4
+#subjectAltName		= otherName:1.2.3.4;UTF8:string
+#subjectAltName		= dirName:dir_sect
 #[ dir_sect ]
 #C=CN
 #O=Xiami Inc.
@@ -82,20 +82,20 @@ subjectAltName  = email:copy, email:i@example.com
 # 可选值同使用者可选名称
 #  除了 email:copy 不能用
 # issuer:copy : 复制颁发者的使用者可选名称过来
-issuerAltName   = issuer:copy
+issuerAltName		= issuer:copy
 
 # 授权信息访问(MUST non-critical)
 # 格式：OID;Location
-authorityInfoAccess = OCSP;URI:$url_ocsp, caIssuers;URI:$url_cacert
+authorityInfoAccess	= OCSP;URI:$url_ocsp, caIssuers;URI:$url_cacert
 
 # CRL 分发点(SHOULD non-critical)
-crlDistributionPoints   = URI:$url_crl
-#crlDistributionPoints   = crldp1_section
+crlDistributionPoints	= URI:$url_crl
+#crlDistributionPoints	= crldp1_section
 #[crldp1_section]
-#fullname = URI:$url_crl
+#fullname	= URI:$url_crl
 # CRLIssuer 用于 indirect CRLs
-#CRLIssuer = dirName:crlissuer_sect
-#reasons = keyCompromise, CACompromise
+#CRLIssuer	= dirName:crlissuer_sect
+#reasons		= keyCompromise, CACompromise
 #[crlissuer_sect]
 #C=UK
 #O=Organisation
@@ -106,36 +106,38 @@ crlDistributionPoints   = URI:$url_crl
 # 证书策略
 #  可以是单一 OID ，如果要包含 CPS 等额外信息需要额外建节。
 #  如果要包含 userNotice 需要加上 ia5org 以兼容 IE5 编码。
-certificatePolicies = anyPolicy
-#certificatePolicies = ia5org, @crtpol
+certificatePolicies	= anyPolicy
+#certificatePolicies	= ia5org, @crtpol
 #[ crtpol ]
-#policyIdentifier    = EV
-#CPS.1   = URI:http://www.example.com
-#CPS.2   = URI:http://mirror.example.com
-#userNotice.1    = @notice
+#policyIdentifier	= EV
+#CPS.1				= URI:http://www.example.com
+#CPS.2				= URI:http://mirror.example.com
+#userNotice.1		= @notice
 #[ notice ]
-#explicitText    = "Explicit Text Here"
+#explicitText		= "Explicit Text Here"
 # organization 和 noticeNumbers 必须同时存在
-#organization    = "Org"
-#noticeNumbers   = 1,2,3,4
+#organization		= "Org"
+#noticeNumbers		= 1,2,3,4
 
 # 未详细了解扩展项
-#policyConstraints   = requireExplicitPolicy:3
+#policyConstraints	= requireExplicitPolicy:3
 #  inhibitAnyPolicy MUST critical
-#inhibitAnyPolicy    = critical, 2
-#nameConstraints = permitted;email:.example.com
+#inhibitAnyPolicy	= critical, 2
+#nameConstraints		= permitted;email:.example.com
 # OCSP No Check
-#noCheck     = ignored
+#noCheck				= ignored
 # The following is which in RFC5280 but not in openssl doc
-#policyMappings =
-#subjectDirectoryAttributes =
-#freshestCRL =
-#subjectInfoAccess =
+#policyMappings		=
+#subjectDirectoryAttributes	=
+#freshestCRL			=
+#subjectInfoAccess	=
 
 # 自定义扩展
-#1.2.3.4 = critical, ASN1:UTF8String:Some random data
-#1.2.3.4 = critical, DER:01:02:03:04
-#1.2.3.4 = ASN1:SEQUENCE:seq_sect
+#1.2.3.4		= critical, ASN1:UTF8String:Some random data
+#1.2.3.4		= critical, DER:01:02:03:04
+#1.2.3.4		= ASN1:SEQUENCE:seq_sect
 #[ seq_sect ]
-#field1  = UTF8:field1
-#field2  = UTF8:field2
+#field1		= UTF8:field1
+#field2		= UTF8:field2
+
+# vim: set ts=4:
