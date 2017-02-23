@@ -47,7 +47,7 @@ private_key		= $dir/privkey/01.key
 # -days
 # 证书有效期(日)
 # 必须设置 default_days 或 default_enddate
-#default_days	= 365
+default_days	= 365
 
 # -startdate
 # 证书有效期从(默认当前日期)
