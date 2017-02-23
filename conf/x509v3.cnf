@@ -4,6 +4,9 @@ url_ocsp	= $url_base/ocsp
 url_cacert	= $url_base/ca.crt
 url_crl		= $url_base/ca.crl
 
+oid_file	= ext.oid
+#oid_section	=
+
 # x509v3 扩展节
 # 格式：extension_name = [critical, ]value
 [ v3ext ]
