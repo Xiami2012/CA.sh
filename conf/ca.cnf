@@ -51,7 +51,9 @@ default_days	= 365
 
 # -startdate
 # 证书有效期从(默认当前日期)
-# 格式：YYMMDDHHMMSSZ (default_enddate 同)
+# 格式：[YY]YYMMDDHHMMSSZ (default_enddate 同)
+# 如果年份为 4 位，将生成 GENERALIZEDTIME ，否则生成 UTCTIME
+# 注：openssl ca -updatedb 仅能正确处理 UTCTIME
 #default_startdate	=
 
 # -enddate
