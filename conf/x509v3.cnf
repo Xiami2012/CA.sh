@@ -60,6 +60,7 @@ authorityKeyIdentifier	= keyid, issuer:always
 
 # 使用者可选名称
 #  (如果 DN 为空，MUST critical；否则 SHOULD non-critical)
+# 通常在证书请求中出现
 # 以下任意搭配（可重复）
 # email : 特殊值 copy 意味着和 DN 中的 EMAIL 一致
 # URI : 统一资源标识
@@ -68,7 +69,7 @@ authorityKeyIdentifier	= keyid, issuer:always
 # IP : IP 地址
 # dirName : 一个 DN 信息节
 # otherName : 自定义值。格式 OID;ASN1_CONTENT
-subjectAltName		= email:copy, email:i@example.com
+#subjectAltName		= email:copy, email:i@example.com
 #subjectAltName		= URI:http://www.example.com
 #subjectAltName		= DNS:www.example.com
 #subjectAltName		= IP:192.168.1.1
@@ -85,7 +86,7 @@ subjectAltName		= email:copy, email:i@example.com
 # 可选值同使用者可选名称
 #  除了 email:copy 不能用
 # issuer:copy : 复制颁发者的使用者可选名称过来
-issuerAltName		= issuer:copy
+#issuerAltName		= issuer:copy
 
 # 授权信息访问(MUST non-critical)
 # 格式：OID;Location
@@ -108,7 +109,7 @@ crlDistributionPoints	= URI:$url_crl
 
 # 证书策略
 #  可以是单一 OID ，如果要包含 CPS 等额外信息需要额外建节。
-#  如果要包含 userNotice 需要加上 ia5org 以兼容 IE5 编码。
+#  如果要包含 userNotice 需要加上 ia5org 以兼容 Windows 证书管理器。
 certificatePolicies	= anyPolicy
 #certificatePolicies	= ia5org, @crtpol
 #[ crtpol ]

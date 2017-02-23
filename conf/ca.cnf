@@ -128,7 +128,7 @@ copy_extensions	= copy
 [ v2crlext ]
 # All 7 fields from RFC 5280
 authorityKeyIdentifier	= keyid, issuer
-issuerAltName			= issuer:copy
+#issuerAltName			= issuer:copy
 # cRLNumber 由 ca 的 crlnumber 项控制
 # TODO: Delta CRL Indicator
 #deltaCRL				=

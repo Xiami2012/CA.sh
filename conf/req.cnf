@@ -40,7 +40,7 @@ string_mask			= utf8only
 
 # -reqexts
 # 证书请求扩展
-#req_extensions		= v3ext
+#req_extensions		= req_v3ext
 
 # -x509 -extensions
 # 仅当使用了 -x509 参数时有效
@@ -73,5 +73,19 @@ organizationName		= Organization Name
 organizationUnitName	= Organization Unit Name
 commonName				= Common Name
 emailAddress			= Email Address
+
+[ req_v3ext ]
+subjectAltName          = email:copy, email:i@example.com
+#subjectAltName         = URI:http://www.example.com
+#subjectAltName         = DNS:www.example.com
+#subjectAltName         = IP:192.168.1.1
+#subjectAltName         = RID:1.2.3.4
+#subjectAltName         = otherName:1.2.3.4;UTF8:string
+#subjectAltName         = dirName:dir_sect
+#[ dir_sect ]
+#C=CN
+#O=Xiami Inc.
+#OU=Xiami Unit
+#CN=Xiami
 
 # vim: set ts=4:
