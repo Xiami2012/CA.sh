@@ -1,0 +1,159 @@
+#
+# OpenSSL ca 用配置文件
+#
+# 内含所有手册涉及到的配置项
+#
+# Author: Xiami
+# Email: i@f2light.com
+#
+
+[ default ]
+url_cacert	= http://www.example.com/ca.crt
+
+# 全局配置
+#oid_file	= ext.oid
+#oid_section	=
+
+[ ca ]
+# -name [Mandatory]
+# 选择使用的 ca 配置节
+default_ca	= CA_default
+
+# 以下参数只能直接从 ca 节读取
+
+# 读写随机数种子的文件，也可以是 EGD 套接字
+#RANDFILE	=
+
+# -msie_hack
+# 必须位于 ca 节才能被正确读取(文档说可能是 bug)
+# 兼容老版本 IE ，有若干安全问题，不建议使用
+#msie_hack	= no
+
+[ CA_default ]
+dir				= .
+
+# -outdir [Mandatory]
+# 新证书的存放目录
+new_certs_dir	= $dir/cert
+
+# -cert [Mandatory]
+# CA 证书
+certificate		= ${new_certs_dir}/01.pem
+
+# -keyfile [Mandatory]
+# CA 私钥
+private_key		= $dir/privkey/01.key
+
+# -days
+# 证书有效期(日)
+# 必须设置 default_days 或 default_enddate
+default_days	= 365
+
+# -startdate
+# 证书有效期从(默认当前日期)
+# 格式：[YY]YYMMDDHHMMSSZ (default_enddate 同)
+# 如果年份为 4 位，将生成 GENERALIZEDTIME ，否则生成 UTCTIME
+# 注：openssl ca -updatedb 仅能正确处理 UTCTIME
+#default_startdate	=
+
+# -enddate
+# 证书有效期到
+# 必须设置 default_days 或 default_enddate
+#default_enddate		=
+
+# -crlhours
+# CRL 有效期(小时)
+# 必须设置 default_crl_hours 或 default_crl_days
+#default_crl_hours	=
+
+# -crldays
+# CRL 有效期(日)
+# 必须设置 default_crl_hours 或 default_crl_days
+default_crl_days	= 7
+
+# -md [Mandatory]
+# 消息摘要算法(值参见 dgst(1))
+# 可设置为 default 以获取证书公钥算法的默认签名哈希算法
+#  参见 EVP_PKEY_get_default_digest_nid(3) (当前是无脑 SHA1)
+default_md		= sha512
+
+# CA 数据库 [Mandatory]
+# 初始值为空的文本文件
+database		= $dir/db/index.txt
+
+# 唯一使用者
+# 默认值 yes (用于兼容 0.9.8 前的 OpenSSL)
+unique_subject	= no
+
+# 下一个证书序列号 [Mandatory]
+# 文本文件，包含一个数字(十六进制)
+serial			= $dir/db/serial
+
+# 下一个 CRL 序列号
+# 文本文件，包含一个数字(十六进制)
+# 仅当此文件存在时生成 CRL 序列号
+crlnumber		= $dir/db/crlnumber
+
+# -extensions
+# V3 证书扩展节
+# 如不指定则生成 V1 证书
+#x509_extensions	= v3ext
+
+# -crlexts
+# V2 CRL 扩展节
+# 如不指定则生成 V1 CRL
+crl_extensions	= v2crlext
+
+# -preserveDN
+# 保持 DN 顺序(用于老版本 IE 兼容)
+#preserve		= no
+
+# -noemailDN
+# 当不希望 EMAIL 字段出现在 DN 中时设置为 no
+# 默认 yes
+#email_in_dn		= no
+
+# -policy [Mandatory]
+# 策略节(控制 DN 中哪些字段为必须)
+policy			= match_pol
+
+# 展现格式
+# 参见 x509 手册的 -nameopt, -certopt 参数
+name_opt		= ca_default
+cert_opt		= ca_default
+
+# 从证书请求复制扩展信息
+# 可选值：none(default), copy, copyall(insecure)
+# 谨慎！请阅读 ca 手册 WARNING 部分了解安全隐患！
+copy_extensions	= copy
+
+[ v2crlext ]
+# All 7 fields from RFC 5280
+authorityKeyIdentifier	= keyid, issuer
+#issuerAltName			= issuer:copy
+# cRLNumber 由 ca 的 crlnumber 项控制
+# TODO: Delta CRL Indicator
+#deltaCRL				=
+# 颁发者分发点(仅用于 CRL)
+#  暂时未用到，参见 x509v3_config 手册。
+#issuingDistributionPoint	= critical, @idp_section
+# TODO: Freshest CRL
+#freshestCRL				=
+authorityInfoAccess		= caIssuers;URI:$url_cacert
+
+[ match_pol ]
+# 格式：DN 字段 = match/supplied/optional
+#  match: 必须和 CA 证书里的相应字段相同
+#  supplied: 必须出现
+#  optional: 可有可无
+# 没有出现的 DN 字段会被自动删除除非设置了 -preserveDN
+#domainComponent		= optional
+countryName				= supplied
+stateOrProvinceName		= optional
+localityName			= optional
+organizationName		= supplied
+organizationalUnitName	= optional
+commonName				= supplied
+emailAddress			= optional
+
+# vim: set ts=4:
