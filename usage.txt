@@ -7,6 +7,7 @@ openssl genrsa 2048
 openssl genpkey -algorithm rsa -pkeyopt rsa_keygen_bits:2048
 #  EC (secp521r1 为指定曲线)
 openssl ecparam -name secp521r1 -genkey -noout
+openssl genpkey -algorithm ec -pkeyopt ec_paramgen_curve:secp521r1
 
 # 密钥保护(使用 aes256 保护)
 # 不论输入是否加密过的密钥，是何种算法加密
@@ -43,5 +44,9 @@ openssl ca -revoke cert/02.pem -config ca.cnf -crl_reason superseded
 
 # 生成 CRL
 openssl ca -gencrl -config ca.cnf
+
+# 启动简单 OCSP 响应服务
+openssl ocsp -index db/index.txt -CA cert/01.pem -rsigner ocsp.crt resp_key_id -rkey ocsp.key \
+    -port 8000 -ndays 7
 
 # 生成 PKCS#12 个人证书
