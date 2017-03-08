@@ -283,6 +283,8 @@ cmd_revoke() {
         return 1
     fi
     eval openssl ca -config \"$CONFIG_CA\" -revoke \"$1\" $CA_ARGS || return $?
+    echo "Automatically call gencrl..." >&2
+    cmd_gencrl
 }
 
 # getopt
