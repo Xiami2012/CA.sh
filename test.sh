@@ -12,7 +12,7 @@ mkdir -p test
 
 mkdir test/{root,inter}
 pushd test/root
-$S init -g rsa:4096 "/C=CN/O=Test Inc./CN=Test Root CA/emailAddress=ca@example.com" || exit 1
+$S init -g rsa:4096 "/C=CN/O=Test Inc./CN=Test Root CA/emailAddress=ca@example.com/" || exit 1
 $S genocspcert -g rsa:2048 "/C=CN/O=Test Inc./CN=Test Root CA OCSP Responder/" || exit 1
 $S newca -g rsa:2048 "/C=CN/O=Test Inc./CN=Test Intermediate CA/" ca_intermediate_v3ext ../inter || exit 1
 $S gencrl || exit 1

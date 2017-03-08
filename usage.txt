@@ -46,7 +46,7 @@ openssl ca -revoke cert/02.pem -config ca.cnf -crl_reason superseded
 openssl ca -gencrl -config ca.cnf
 
 # 启动简单 OCSP 响应服务
-openssl ocsp -index db/index.txt -CA cert/01.pem -rsigner ocsp.crt resp_key_id -rkey ocsp.key \
-    -port 8000 -ndays 7
+openssl ocsp -index db/index.txt -CA cert/01.pem -rsigner ocsp.crt -resp_key_id -rkey ocsp.key \
+    -port 127.0.0.1:8000 -ndays 7
 
 # 生成 PKCS#12 个人证书
